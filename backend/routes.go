@@ -7,6 +7,7 @@ type Route struct {
 	Method      string
 	Pattern     string
 	HandlerFunc http.HandlerFunc
+	Clearence   int16
 }
 
 type Routes []Route
@@ -17,23 +18,27 @@ var routes = Routes{
 		"GET",
 		"/",
 		Index,
+		0,
 	},
 	Route{
 		"TodoIndex",
 		"GET",
 		"/api/todos",
 		TodoIndex,
+		1,
 	},
 	Route{
 		"TodoShow",
 		"GET",
 		"/api/todos/{todoId}",
 		TodoShow,
+		1,
 	},
 	Route{
 		"Login",
 		"POST",
 		"/api/login",
 		Login,
+		0,
 	},
 }

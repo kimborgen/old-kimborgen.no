@@ -8,22 +8,26 @@ import (
 )
 
 type MyCustomClaims struct {
-	Foo string `json:"foo"`
+	User User
 	jwt.StandardClaims
 }
 
 var my_secret_key []byte = []byte("yolo")
 
-func getToken() string {
+func getToken(user User) string {
 
+	//dont send the hashed password in the token
+	hashed_pass := user.HashedPassword
+	user.HashedPassword = ""
 	// Create the Claims
 	claims := MyCustomClaims{
-		"bar",
+		user,
 		jwt.StandardClaims{
 			ExpiresAt: time.Now().Add(time.Hour).Unix(),
-			Issuer:    "test",
+			Issuer:    "me",
 		},
 	}
+	user.HashedPassword = hashed_pass
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	signed_token, err := token.SignedString(my_secret_key)
@@ -34,20 +38,19 @@ func getToken() string {
 	return signed_token
 }
 
-func checkToken(token_string string) bool {
+func checkToken(token_string string, customClaims *MyCustomClaims) {
 	token, err := jwt.ParseWithClaims(token_string, &MyCustomClaims{}, func(token *jwt.Token) (interface{}, error) {
 		return my_secret_key, nil
 	})
+
 	if err != nil {
 		log.Fatal(err)
-		return false
 	}
 
 	if claims, ok := token.Claims.(*MyCustomClaims); ok && token.Valid {
-		log.Printf("%v %v", claims.Foo, claims.StandardClaims.ExpiresAt)
-		return true
+		log.Printf("%v %v", claims.User.Username, claims.StandardClaims.ExpiresAt)
+		*customClaims = *claims
 	} else {
 		log.Fatal(err)
-		return false
 	}
 }
