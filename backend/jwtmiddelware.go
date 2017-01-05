@@ -38,7 +38,15 @@ func Jwtmiddelware(next http.Handler) http.Handler {
 				}
 				//check if user can access
 				var claims MyCustomClaims
-				checkToken(dataStructure.Token, &claims)
+				err_5 := checkToken(dataStructure.Token, &claims)
+				if err_5 == 1 {
+					w.Header().Set("Content-Type", "application/json; charset=UTF-8")
+					w.WriteHeader(404)
+					if errr := json.NewEncoder(w).Encode("Token expired"); errr != nil {
+						log.Fatal(errr)
+					}
+					return
+				}
 				if claims.User.Clearance >= route.Clearence {
 					newBody, err_4 := json.Marshal(dataStructure.Data)
 					if err_4 != nil {

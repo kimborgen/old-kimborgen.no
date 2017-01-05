@@ -38,13 +38,16 @@ func getToken(user User) string {
 	return signed_token
 }
 
-func checkToken(token_string string, customClaims *MyCustomClaims) {
+func checkToken(token_string string, customClaims *MyCustomClaims) int {
 	token, err := jwt.ParseWithClaims(token_string, &MyCustomClaims{}, func(token *jwt.Token) (interface{}, error) {
 		return my_secret_key, nil
 	})
 
 	if err != nil {
 		log.Fatal(err)
+	}
+	if !token.Valid {
+		return 1
 	}
 
 	if claims, ok := token.Claims.(*MyCustomClaims); ok && token.Valid {
@@ -53,4 +56,5 @@ func checkToken(token_string string, customClaims *MyCustomClaims) {
 	} else {
 		log.Fatal(err)
 	}
+	return 0
 }
