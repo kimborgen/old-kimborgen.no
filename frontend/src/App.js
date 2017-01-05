@@ -1,21 +1,20 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
 import { NavLink } from './components/NavLink';
 import { IndexLink } from 'react-router'
+import { Menu } from 'semantic-ui-react'
+import { Item } from 'semantic-ui-react'
 
 class App extends Component {
   render() {
     return (
       <div className="App">
         <div>
-          <h1>React Router Tutorial</h1>
-          <ul role="nav">
-            <li><IndexLink to="/" activeStyle={{color:"red"}}>Home</IndexLink></li>
-            <li><NavLink to="/about">About</NavLink></li>
-            <li><NavLink to="/articles">Articles</NavLink></li>
-            <li><NavLink to="/login">Login</NavLink></li>
-          </ul>
+          <Menu>
+            <Item><IndexLink to="/" activeStyle={{color:"red"}}>Home</IndexLink></Item>
+            <Item><NavLink to="/about">About</NavLink></Item>
+            <Item><NavLink to="/articles">Articles</NavLink></Item>
+            <Item><NavLink to="/login">Login</NavLink></Item>
+          </Menu>
         </div>
         {this.props.children}
       </div>
