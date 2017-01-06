@@ -22,9 +22,9 @@ export class Login extends React.Component {
 
     handleSubmit(event) {
       event.preventDefault();
-      var request = new Request('/api/login', {
+      var request = new Request('http://localhost:8080/api/login', {
       	method: 'POST',
-        mode: 'cors',
+        mode: 'no-cors',
       	headers: new Headers({
       		'Content-Type': 'application/json'
       	}),
@@ -34,10 +34,9 @@ export class Login extends React.Component {
         })
       });
       fetch(request).then(function(response) {
-      	return response.json();
-      }).then(function(j) {
-        this.setState( { token: j } );
-        localStorage.setItem( 'token', j);
+        console.log(response)
+        this.setState( { token: response } );
+        localStorage.setItem( 'token', response);
       }.bind(this)).catch(function(err) {
 	       // Error :(
          console.log(err)

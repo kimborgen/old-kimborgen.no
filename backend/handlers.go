@@ -46,7 +46,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	if user.Username != "" {
 		log.Println(user)
 		payload := getToken(user)
-
+		log.Println(payload)
 		w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 		w.WriteHeader(http.StatusCreated)
 		if erro := json.NewEncoder(w).Encode(payload); erro != nil {
