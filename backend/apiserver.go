@@ -2,6 +2,7 @@ package main
 
 import (
 	"crypto/tls"
+	"flag"
 	"log"
 	"net/http"
 	"os"
@@ -10,8 +11,17 @@ import (
 )
 
 var production bool = false
+var host string
 
 func main() {
+	boolPtr := flag.Bool("prod", false, "activate production enviroment")
+	flag.Parse()
+	if *boolPtr {
+		log.Println("Production enviroment detected")
+		production = true
+	} else {
+		log.Println("Development enviroment detected")
+	}
 	dbStart()
 	cleanUp()
 	GenerateTLSpair()
@@ -27,13 +37,19 @@ func main() {
 		},
 	}
 	router := NewRouter()
-	log.Println("LetsGo!")
+
+	if production {
+		host = "146.185.153.19:80"
+	} else {
+		host = "localhost:80"
+	}
 	srv := &http.Server{
-		Addr:         ":8080",
+		Addr:         host,
 		Handler:      router,
 		TLSConfig:    cfg,
 		TLSNextProto: make(map[string]func(*http.Server, *tls.Conn, http.Handler), 0),
 	}
+	log.Println("LetsGo!")
 	log.Fatal(srv.ListenAndServeTLS("cert.pem", "key.pem"))
 }
 

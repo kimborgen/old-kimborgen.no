@@ -12,7 +12,7 @@ func GenerateTLSpair() {
 	// If they are not available, generate new ones.
 	err := httpscerts.Check("cert.pem", "key.pem")
 	if err != nil {
-		err = httpscerts.Generate("cert.pem", "key.pem", "localhost:8080")
+		err = httpscerts.Generate("cert.pem", "key.pem", host)
 		if err != nil {
 			log.Fatal("Error: Couldn't create https certs.")
 		}
