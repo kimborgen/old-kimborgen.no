@@ -10,5 +10,5 @@ func main() {
 	http.Handle("/", fs)
 
 	log.Println("Listening...")
-	http.ListenAndServe(":80", nil)
+	http.ListenAndServe("146.185.153.19:80", nil)
 }
