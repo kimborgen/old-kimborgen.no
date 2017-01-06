@@ -12,6 +12,7 @@ func NewRouter() *mux.Router {
 		var handler http.Handler
 		handler = route.HandlerFunc
 		handler = Logger(handler, route.Name)
+		handler = TlsEncryption(handler)
 		handler = DoCorsThings(handler)
 		handler = Jwtmiddelware(handler)
 
