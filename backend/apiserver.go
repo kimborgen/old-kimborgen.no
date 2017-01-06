@@ -39,7 +39,7 @@ func main() {
 	router := NewRouter()
 
 	if production {
-		host = "146.185.153.19:80"
+		host = "146.185.153.19:22"
 	} else {
 		host = "localhost:80"
 	}
