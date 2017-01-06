@@ -39,9 +39,9 @@ func main() {
 	router := NewRouter()
 
 	if production {
-		host = "146.185.153.19:22"
+		host = "188.166.130.155:8090"
 	} else {
-		host = "localhost:80"
+		host = "localhost:8080"
 	}
 	srv := &http.Server{
 		Addr:         host,
