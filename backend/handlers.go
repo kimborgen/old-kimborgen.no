@@ -51,8 +51,13 @@ func Login(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 		log.Println(user)
-		payload := getToken(user)
-		log.Println(payload)
+		pay := getToken(user)
+		type Payload struct {
+			Token string `json:"token"`
+		}
+		payload := Payload{Token: pay}
+		log.Println(json.Marshal(payload))
+
 		w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 		w.WriteHeader(http.StatusCreated)
 		if erro := json.NewEncoder(w).Encode(payload); erro != nil {

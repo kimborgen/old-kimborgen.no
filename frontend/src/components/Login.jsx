@@ -33,18 +33,26 @@ export class Login extends React.Component {
           password: this.state.password
         })
       });
+      var rep = '';
+
       fetch(request).then(function(response) {
         console.log(response.ok)
-        if (response.ok == true) {
-          this.setState( { reply: "logged in!" } );
+        console.log(response.body)
+        console.log(response.status)
+        return response.json();
+      }).then(function(response) {
+        if (response.ok === true) {
+          rep = "logged in!";
           localStorage.setItem( 'token', response);
         } else {
-          this.setState( {reply: response.body})
+          rep = response.body;
         }
-      }.bind(this)).catch(function(err) {
+      }).catch(function(err) {
 	       // Error :(
-         console.log(err)
+         console.log(err);
       });
+      this.setState({reply: rep});
+      console.log(request)
     }
     render() {
       return (
