@@ -22,7 +22,7 @@ export class Login extends React.Component {
 
     handleSubmit(event) {
       event.preventDefault();
-      var request = new Request('http://localhost:8080/api/login', {
+      var request = new Request('https://146.185.153.19:8090/api/login', {
       	method: 'POST',
         mode: 'no-cors',
       	headers: new Headers({
