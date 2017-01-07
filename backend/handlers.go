@@ -8,6 +8,8 @@ import (
 	"log"
 	"net/http"
 
+	"golang.org/x/crypto/bcrypt"
+
 	"github.com/gorilla/mux"
 )
 
@@ -34,16 +36,20 @@ func Index(w http.ResponseWriter, r *http.Request) {
 
 func Login(w http.ResponseWriter, r *http.Request) {
 	type LoginDetails struct {
-		Username       string `json:"username"`
-		HashedPassword string `json:"hashed_password"`
+		Username string `json:"username"`
+		Password string `json:"hashed_password"`
 	}
 	var loginDetails LoginDetails
 	getJsonData(&loginDetails, w, r)
 	var user User
-	//TODO Delete this
-	loginDetails.HashedPassword = testing_password
-	db.Where("username = $1 AND hashed_password = $2", loginDetails.Username, loginDetails.HashedPassword).First(&user)
+	db.Where("username = $1", loginDetails.Username).First(&user)
 	if user.Username != "" {
+		if production {
+			err := bcrypt.CompareHashAndPassword([]byte(user.HashedPassword), []byte(loginDetails.Password))
+			if err != nil {
+				log.Fatal(err)
+			}
+		}
 		log.Println(user)
 		payload := getToken(user)
 		log.Println(payload)

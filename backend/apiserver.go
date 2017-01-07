@@ -72,7 +72,6 @@ func cleanUp() {
 	signal.Notify(c, os.Interrupt, syscall.SIGTERM)
 	go func() {
 		<-c
-		destroyTables()
 		dbClose()
 		log.Println("cleaned up! goodbye")
 		os.Exit(1)

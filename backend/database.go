@@ -32,15 +32,19 @@ func dbClose() {
 func createTables() {
 	db.AutoMigrate(&User{})
 	db.AutoMigrate(&Article{})
-	password, _ := bcrypt.GenerateFromPassword([]byte("kim"), bcrypt.DefaultCost)
-	user := User{Name: "kim", Clearance: 9, Username: "kim", HashedPassword: string(password)}
-	testing_password = user.HashedPassword
-	db.Create(&user)
+	if !production {
+		password, _ := bcrypt.GenerateFromPassword([]byte("kim"), bcrypt.DefaultCost)
+		user := User{Name: "kim", Clearance: 9, Username: "kim", HashedPassword: string(password)}
+		testing_password = user.HashedPassword
+		db.Create(&user)
+	}
 }
 
 func destroyTables() {
-	user := User{Name: "kim", Clearance: 9, Username: "kim"}
-	db.Delete(&user)
+	if !production {
+		user := User{Name: "kim", Clearance: 9, Username: "kim"}
+		db.Delete(&user)
+	}
 }
 
 /*
