@@ -37,7 +37,7 @@ func Index(w http.ResponseWriter, r *http.Request) {
 func Login(w http.ResponseWriter, r *http.Request) {
 	type LoginDetails struct {
 		Username string `json:"username"`
-		Password string `json:"hashed_password"`
+		Password string `json:"password"`
 	}
 	var loginDetails LoginDetails
 	getJsonData(&loginDetails, w, r)

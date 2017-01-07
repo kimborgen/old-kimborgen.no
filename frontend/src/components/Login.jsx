@@ -5,7 +5,7 @@ import { Input, Button, Form } from 'semantic-ui-react'
 export class Login extends React.Component {
     constructor(props) {
       super(props);
-      this.state = {username: '', password: '' , token: ''};
+      this.state = {username: '', password: '' , reply:''};
 
       this.handleChangeUsername = this.handleChangeUsername.bind(this);
       this.handleChangePassword = this.handleChangePassword.bind(this);
@@ -34,36 +34,36 @@ export class Login extends React.Component {
         })
       });
       fetch(request).then(function(response) {
-        console.log(response)
-        this.setState( { token: response } );
-        localStorage.setItem( 'token', response);
+        console.log(response.ok)
+        if (response.ok == true) {
+          this.setState( { reply: "logged in!" } );
+          localStorage.setItem( 'token', response);
+        } else {
+          this.setState( {reply: response.body})
+        }
       }.bind(this)).catch(function(err) {
 	       // Error :(
          console.log(err)
       });
     }
     render() {
-        if(this.state.token === ''){
-          return (
-            <div>
-              <Form>
-                <Form.Field>
-                  <label>Username</label>
-                  <Input fluid placeholder='username' value={this.state.username} onChange={this.handleChangeUsername}/>
-                </Form.Field>
-                <Form.Field>
-                  <label>Password</label>
-                  <Input fluid type="password" placeholder='password' value={this.state.password} onChange={this.handleChangePassword} />
-                </Form.Field>
-                <Button fluid type='submit' value='submit' onClick={this.handleSubmit}>Submit</Button>
-              </Form>
-            </div>
-        );
-      } else {
-        return (
-          <p>Logged in!</p>
-        );
-      }
+      return (
+        <div>
+          <p>{this.state.reply}</p>
+          <Form>
+            <Form.Field>
+              <label>Username</label>
+              <Input fluid placeholder='username' value={this.state.username} onChange={this.handleChangeUsername}/>
+            </Form.Field>
+            <Form.Field>
+              <label>Password</label>
+              <Input fluid type="password" placeholder='password' value={this.state.password} onChange={this.handleChangePassword} />
+            </Form.Field>
+            <Button fluid type='submit' value='submit' onClick={this.handleSubmit}>Submit</Button>
+          </Form>
+        </div>
+      );
+
     }
 }
 
