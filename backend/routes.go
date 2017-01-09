@@ -41,4 +41,25 @@ var routes = Routes{
 		Login,
 		0,
 	},
+	Route{
+		"Kollektiv",
+		"GET",
+		"/api/kollektiv/{name}",
+		Kollektivet,
+		0,
+	},
+	Route{
+		"Kollektiv",
+		"POST",
+		"/api/kollektiv/update",
+		KollektivetUpdate,
+		0,
+	},
+	Route{
+		"Kollektiv",
+		"POST",
+		"/api/kollektiv/new",
+		KollektivetNew,
+		0,
+	},
 }

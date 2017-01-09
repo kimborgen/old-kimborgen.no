@@ -73,6 +73,64 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func Kollektivet(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	name := vars["name"]
+	var kollektiv Kollektiv
+	db.Where("name = $1", name).First(&kollektiv)
+	if kollektiv.Name != "" {
+		write_json(kollektiv, w)
+	} else {
+		write_error("kollektiv not found", w)
+	}
+}
+func KollektivetNew(w http.ResponseWriter, r *http.Request) {
+	var kollektiv Kollektiv
+	getJsonData(&kollektiv, w, r)
+	var kollektiv_2 []Kollektiv
+	if kollektiv.Name != "" {
+		db.Where("name = $1", kollektiv.Name).Find(&kollektiv_2)
+		if len(kollektiv_2) > 0 {
+			write_error("choose another name", w)
+		} else {
+			db.Create(&kollektiv)
+		}
+	} else {
+		write_error("empty name", w)
+	}
+}
+
+func KollektivetUpdate(w http.ResponseWriter, r *http.Request) {
+	var kollektiv Kollektiv
+	getJsonData(&kollektiv, w, r)
+	if kollektiv.Name != "" {
+		db.Model(&kollektiv).Updates(kollektiv)
+	} else {
+		write_error("empty name", w)
+	}
+}
+
+func write_error(err string, w http.ResponseWriter) {
+	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
+	w.WriteHeader(404) // unprocessable entity
+	if err := json.NewEncoder(w).Encode(err); err != nil {
+		log.Fatal(err)
+	}
+}
+
+func write_success(w http.ResponseWriter) {
+	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
+	w.WriteHeader(http.StatusCreated)
+}
+
+func write_json(thing interface{}, w http.ResponseWriter) {
+	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
+	w.WriteHeader(http.StatusOK) // unprocessable entity
+	if errr := json.NewEncoder(w).Encode(thing); errr != nil {
+		log.Fatal(errr)
+	}
+}
+
 func TodoIndex(w http.ResponseWriter, r *http.Request) {
 	todos := Todos{
 		Todo{Name: "Write presentation"},
